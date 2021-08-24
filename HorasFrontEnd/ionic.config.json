@@ -1,0 +1,7 @@
+{
+  "name": "HorasFrontEnd",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
