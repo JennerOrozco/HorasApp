@@ -1,10 +1,13 @@
 <?php
-class Product{
-  
-    // database connection and table name
+include_once '../config/common.php';
+class Product
+{
+
+    // DB connection y table name
     private $conn;
     private $table_name = "products";
-  
+    private Common $common;
+
     // object properties
     public $id;
     public $name;
@@ -13,33 +16,44 @@ class Product{
     public $category_id;
     public $category_name;
     public $created;
-  
+
+
     // constructor with $db as database connection
-    public function __construct($db){
+    public function __construct($db)
+    {
         $this->conn = $db;
+        $this->common = new Common();
     }
 
     // read products
-function read(){
-  
-    // select all query
-    $query = "SELECT
-                c.name as category_name, p.id, p.name, p.description, p.price, p.category_id, p.created
-            FROM
-                " . $this->table_name . " p
-                LEFT JOIN
-                    categories c
-                        ON p.category_id = c.id
-            ORDER BY
-                p.created DESC";
-  
-    // prepare query statement
-    $stmt = $this->conn->prepare($query);
-  
-    // execute query
-    $stmt->execute();
-  
-    return $stmt;
+    function read()
+    {
+        $query = $this->common->createSelectQuery("*", $this->table_name, "", "1");
+
+        $stmt = $this->conn->prepare($query);
+
+        $stmt->execute();
+
+        return $stmt;
+    }
+
+
+    function create()
+    {
+        $insertParams = "name,price,description,category_id,created";
+
+        $query = $this->common->createInsertQuery($this->table_name, $insertParams);
+
+        $stmt = $this->conn->prepare($query);
+
+        $this->common->sanitize($this, $insertParams);
+
+        $this->common->bindParameter($stmt, $this, $insertParams);
+
+        if ($stmt->execute()) {
+            return true;
+        }
+
+        return false;
+    }
 }
-}
-?>
