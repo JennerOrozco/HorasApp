@@ -12,11 +12,8 @@ $user = new User($db);
 
 $data = json_decode(file_get_contents("php://input"));
 
-$user->firstName = $data->firstName;
-$user->lastName = $data->lastName;
-$user->company = $data->company;
-$user->email = $data->email;
-$user->password = $data->password;
+$common->inputMappingObj($data, $user);
+
 $user->user = substr($data->firstName, 0, -1) . $data->lastName;
 
 if (

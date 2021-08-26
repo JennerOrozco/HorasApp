@@ -7,10 +7,9 @@ header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers
 
 include_once '../objects/user.php';
 include_once '../common/commonIncludeJWT.php';
+include_once '../common/commonInclude.php';
 
 use \Firebase\JWT\JWT;
-
-include_once '../common/commonInclude.php';
 
 $data = json_decode(file_get_contents("php://input"));
 

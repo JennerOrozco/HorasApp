@@ -16,10 +16,8 @@ if (
     !empty($data->name) &&    !empty($data->price) &&    !empty($data->description) &&    !empty($data->category_id)
 ) {
 
-    $product->name = $data->name;
-    $product->price = $data->price;
-    $product->description = $data->description;
-    $product->category_id = $data->category_id;
+    $common->inputMappingObj($data, $product);
+
     $product->created = date('Y-m-d H:i:s');
 
     if ($product->create()) {

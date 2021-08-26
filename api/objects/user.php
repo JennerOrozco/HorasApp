@@ -59,7 +59,7 @@ class User
 
         $stmt->execute();
 
-        $result = $this->common->mappingObj($stmt, $this);
+        $result = $this->common->statementMappingObj($stmt, $this);
 
         return $result;
     }

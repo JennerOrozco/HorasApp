@@ -38,7 +38,7 @@ class Common
         return $responseArray;
     }
 
-    public function mappingObj($dbResponse, $class)
+    public function statementMappingObj($dbResponse, $class)
     {
         $num = $dbResponse->rowCount();
         if ($num > 0) {
@@ -50,10 +50,18 @@ class Common
             }
             return true;
         }
-
         return false;
     }
 
+    public function inputMappingObj($data, $class)
+    {
+        foreach ($data as $clave => $valor) {
+            try {
+                $class->$clave = $data->$clave;
+            } catch (Exception $e) {
+            }
+        }
+    }
 
     public function response200($Response)
     {
