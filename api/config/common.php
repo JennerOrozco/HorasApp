@@ -11,6 +11,17 @@ class Common
         return $str;
     }
 
+    public function objectToResponse($variables, $class)
+    {
+        $variablesArray = explode(",", $variables);
+        $responseArray = array();
+
+        foreach ($variablesArray as $valor) {
+            $responseArray[$valor] = $class->$valor;
+        }
+        return $responseArray;
+    }
+
     public function response($dbResponse)
     {
         $responseArray = array();
@@ -26,6 +37,23 @@ class Common
 
         return $responseArray;
     }
+
+    public function mappingObj($dbResponse, $class)
+    {
+        $num = $dbResponse->rowCount();
+        if ($num > 0) {
+
+            $row = $dbResponse->fetch(PDO::FETCH_ASSOC);
+
+            foreach ($row as $clave => $valor) {
+                $class->$clave = $valor;
+            }
+            return true;
+        }
+
+        return false;
+    }
+
 
     public function response200($Response)
     {

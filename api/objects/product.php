@@ -2,7 +2,6 @@
 include_once '../config/common.php';
 class Product
 {
-
     // DB connection y table name
     private $conn;
     private $table_name = "products";
