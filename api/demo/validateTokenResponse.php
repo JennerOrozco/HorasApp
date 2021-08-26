@@ -5,7 +5,7 @@ header("Access-Control-Allow-Methods: POST");
 header("Access-Control-Max-Age: 3600");
 header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
 
-include_once 'commonIncludeJWT.php';
+include_once '../common/commonIncludeJWT.php';
 
 use \Firebase\JWT\JWT;
 
@@ -25,29 +25,19 @@ if ($jwt) {
             "message" => "Access granted.",
             "data" => $decoded->data
         ));
-    }
-    // if decode fails, it means jwt is invalid
-    catch (Exception $e) {
+    } catch (Exception $e) {
 
-        // set response code
         http_response_code(401);
 
-        // tell the user access denied  & show error message
         echo json_encode(array(
             "message" => "Access denied.",
             "error" => $e->getMessage()
         ));
     }
+} else {
 
-    // catch will be here
 
-}
-// show error message if jwt is empty
-else {
-
-    // set response code
     http_response_code(401);
 
-    // tell the user access denied
     echo json_encode(array("message" => "Access denied."));
 }
