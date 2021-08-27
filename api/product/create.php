@@ -20,8 +20,11 @@ if (
 
     $product->created = date('Y-m-d H:i:s');
 
-    if ($product->create()) {
-        $common->response200("Product was created.");
+    $result = $product->create();
+
+    if ($result["success"] == true) {
+        
+        $common->response200(array("message" => "Product was Created","id" => $result["id"]));
     } else {
         $common->response503("Unable to create product.");
     }

@@ -2,12 +2,16 @@
 class Common
 {
     //FUNCTION SELECT
-    public function createSelectQuery($fields, $table, $where, $orderBy)
+    public function createSelectQuery($fields, $table, $where, $orderBy,$limit)
     {
         if ($where == "") {
             $where = " 1 = 1";
         }
-        $str = "SELECT " . $fields . " FROM " . $table . " WHERE " . $where . " ORDER BY " . $orderBy;
+
+        if ($orderBy != "") {
+            $orderBy = " ORDER BY " . $orderBy;
+        }
+        $str = "SELECT " . $fields . " FROM " . $table . " WHERE " . $where . $orderBy . $limit;
         return $str;
     }
 
@@ -22,17 +26,16 @@ class Common
         return $responseArray;
     }
 
-    public function response($dbResponse)
+    public function statementMappingArray($dbResponse)
     {
-        $responseArray = array();
-        $responseArray["data"] = array();
+        $responseArray = array();        
 
         while ($row = $dbResponse->fetch(PDO::FETCH_ASSOC)) {
             $arrayItem = array();
             foreach ($row as $clave => $valor) {
                 $arrayItem[$clave] = $valor;
             }
-            array_push($responseArray["data"], $arrayItem);
+            array_push($responseArray, $arrayItem);
         }
 
         return $responseArray;
@@ -55,8 +58,9 @@ class Common
 
     public function inputMappingObj($data, $class)
     {
-        foreach ($data as $clave => $valor) {
-            try {
+        
+        foreach ($data as $clave=>$valor) {
+            try {                
                 $class->$clave = $data->$clave;
             } catch (Exception $e) {
             }
@@ -85,7 +89,7 @@ class Common
         );
     }
 
-    //FUNCTION INSERT
+    //FUNCTION FOR INSERT
 
 
     public function createInsertQuery($table, $parameters)
@@ -119,4 +123,91 @@ class Common
             $stmt->bindParam(":" . $valor, $class->$valor);
         }
     }
+
+    
+    //CRUD FUNCTIONS
+    function read($select,$where,$order,$clase,$limit)
+    {
+        if ($where != ""){
+            $whereArray = explode(",", $where);            
+            $newWhere = "";
+            foreach ($whereArray as $valor) {
+                $newWhere = $newWhere . $valor . "=:" . $valor . ", ";
+            }
+            $newWhere = substr($newWhere, 0, -2);
+        }
+
+        $query = $this->createSelectQuery($select, $clase->table_name, $newWhere, $order,$limit);        
+        
+        $stmt = $clase->conn->prepare($query);
+
+        if ($where != ""){
+            $this->sanitize($clase, $where);
+
+            $this->bindParameter($stmt, $clase, $where);
+        }
+
+        $stmt->execute();
+
+        $num = $stmt->rowCount();
+        
+        if ($num > 0) {
+            $returnData = $this->statementMappingArray($stmt);            
+            return array("success" => true, "data"=>$returnData);            
+        
+        } else {
+            return array("success" => false, "data"=>"");            
+        }
+    }
+
+    function create($insertParams,$clase)
+    {
+        $query = $this->createInsertQuery($clase->table_name, $insertParams);
+
+        $stmt = $clase->conn->prepare($query);
+
+        $this->sanitize($clase, $insertParams);
+
+        $this->bindParameter($stmt, $clase, $insertParams);
+
+        if ($stmt->execute()) {            
+            return array("success" => true, "id"=>$clase->conn->lastInsertId());            
+        }
+        return array("success" => false, "id"=>0);
+    }
+
+
+    function readPersonalizado($select,$clase,$arrayParameter)
+    {
+        
+        $query = $select;        
+        
+        $stmt = $clase->conn->prepare($query);                
+
+        $this->bindParameterPersonalizado($stmt, $arrayParameter);
+        
+
+        $stmt->execute();
+
+        $num = $stmt->rowCount();
+        
+        if ($num > 0) {
+            $returnData = $this->statementMappingArray($stmt);            
+            return array("success" => true, "data"=>$returnData);          
+        
+        } else {
+            return array("success" => false, "data"=>"");            
+        }
+    }
+
+    public function bindParameterPersonalizado($stmt, $parameters)
+    {
+        foreach ($parameters as $clave => $valor) {
+
+            $stmt->bindParam(":" . $clave, $valor);
+        }
+    }
+
+
+
 }

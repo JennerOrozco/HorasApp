@@ -6,15 +6,10 @@ include_once '../common/commonInclude.php';
 include_once '../objects/product.php';
 
 $product = new Product($db);
+$productResult = $product->readProducts();
 
-$stmt = $product->read();
-
-$num = $stmt->rowCount();
-
-if ($num > 0) {
-    $returnData = $common->response($stmt);
-
-    $common->response200($returnData);
+if ($productResult["success"] == true) {    
+    $common->response200(array("data" => $productResult["data"]));
 } else {
     $common->response404("No data found.");
 }

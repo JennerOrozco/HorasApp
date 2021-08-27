@@ -3,10 +3,10 @@ class Database
 {
 
     // specify your own database credentials
-    private $host = "sql530.main-hosting.eu";
+    private $host = "localhost";
     private $db_name = "u474938127_HorasApi";
-    private $username = "u474938127_HorasAdmin";
-    private $password = "Admin123456789.";
+    private $username = "root";
+    private $password = "";
     public $conn;
 
     // get the database connection
