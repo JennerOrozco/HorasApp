@@ -1,0 +1,34 @@
+<?php
+include_once '../config/common.php';
+class {nombreClase}
+{
+    // DB connection y table name
+    public $conn;
+    public $table_name = "{nombreTabla}";
+    public Common $common;
+
+    // object properties
+    {propiedadesClases}
+
+
+    // constructor with $db as database connection
+    public function __construct($db)
+    {
+        $this->conn = $db;
+        $this->common = new Common();
+    }
+
+    // read all
+    function readAll()
+    {
+        return $this->common->read("*", "", "", $this, "");
+    }
+
+
+    function create()
+    {
+        $insertParams = "{stringClass}";
+
+        return $this->common->create($insertParams, $this);
+    }
+}

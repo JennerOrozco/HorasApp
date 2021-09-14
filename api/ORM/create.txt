@@ -1,0 +1,23 @@
+<?php
+include_once '../common/commonHeaderPOST.php';
+include_once '../common/commonInclude.php';
+include_once '../objects/{nombreInstancia}.php';
+
+${nombreInstancia} = new {nombreClase}($db);
+if (
+    true
+) {
+
+    $common->inputMappingObj($data, ${nombreInstancia});
+
+    $result = ${nombreInstancia}->create();
+
+    if ($result["success"] == true) {
+
+        $common->response200(array("message" => "{nombreClase} was Created", "id" => $result["id"]));
+    } else {
+        $common->response503("Unable to create {nombreInstancia}.");
+    }
+} else {
+    $common->response404("Unable to create {nombreInstancia}. Data is incomplete.");
+}

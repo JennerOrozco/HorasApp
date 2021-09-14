@@ -3,11 +3,19 @@ class Database
 {
 
     // specify your own database credentials
-    private $host = "localhost";
-    private $db_name = "u474938127_HorasApi";
-    private $username = "root";
+    private $host = "";
+    private $db_name = "";
+    private $username = "";
     private $password = "";
     public $conn;
+
+    public function __construct($host, $name, $user, $pass)
+    {
+        $this->host = $host;
+        $this->db_name = $name;
+        $this->username = $user;
+        $this->password = $pass;
+    }
 
     // get the database connection
     public function getConnection()
