@@ -1,5 +1,35 @@
-<ion-content>
-  <input type="text">
-  <br>
-  <input type="password">  
+<ion-header translucent>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/"></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content fullscreen>
+  <ion-card>
+    <ion-card-header>
+      <ion-card-subtitle>Login</ion-card-subtitle>
+
+    </ion-card-header>
+
+    <ion-card-content>
+
+      <ion-item class="roundedInput">
+
+        <ion-input type="text"></ion-input>
+      </ion-item>
+
+      <ion-item class="roundedInput">
+
+        <ion-input type="password"></ion-input>
+      </ion-item>
+
+      <ion-button (click)="noShow()" expand="block">Login</ion-button>
+
+      <ion-button (click)="show()" expand="block">Login</ion-button>
+    </ion-card-content>
+  </ion-card>
+
+
 </ion-content>
