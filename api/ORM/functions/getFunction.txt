@@ -1,0 +1,4 @@
+ public function getBy{variable}()
+ {
+    return $this->_read("*", "{variableMin}=", "", $this, "");
+ }

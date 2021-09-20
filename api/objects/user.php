@@ -1,18 +1,15 @@
 <?php
-include_once '../config/common.php';
-class User
-{
-    // database connection and table name
-    public $conn;
-    public $table_name = "users";
-    public Common $common;
+include_once __DIR__ . '/../common/class/crud.php';
 
-    // object properties
+class User extends CRUD
+{
+
+    public $conn;
+    public $table_name = "userweb";
+
     public $id;
-    public $firstName;
-    public $lastName;
-    public $company;
-    public $email;
+    public $nombres;
+    public $correo;
     public $user;
     public $password;
 
@@ -20,26 +17,73 @@ class User
     public function __construct($db)
     {
         $this->conn = $db;
-        $this->common = new Common();
     }
 
-    function create()
+
+    public function getAll()
     {
-        $insertParams = "firstName,lastName,company,user,email,password";
+        return $this->_read("*", "", "", $this, "");
+    }
+
+    public function getById()
+    {
+        return $this->_read("*", "id=", "", $this, "");
+    }
+
+
+    public function createUser()
+    {
+        $insertParams = "nombres,correo,user,password";
+
         $this->password = password_hash($this->password, PASSWORD_BCRYPT);
-        return $this->common->create($insertParams,$this);
+
+        return $this->_create($insertParams, $this);
     }
 
-    // check if given email exist in the database
-    function emailExists()
+    function updateUser()
     {
-        $result = $this->common->read("*","email","",$this,"" );
-        
-        if ($result["success"] == true) {    
-            $this->common->inputMappingObj((object) $result["data"][0],$this);            
+        $updateParams = "nombres,correo";
+
+        $whereParams = "id=";
+
+        return $this->_update($updateParams, $whereParams, $this);
+    }
+
+    function deteleById()
+    {
+        $whereParams = "id=";
+        return $this->_delete($whereParams, $this);
+    }
+
+
+    function existField($string)
+    {
+        $result = $this->_read("*", $string, "", $this, "");
+
+        if ($this->validateStatus($result)) {
+
+            $this->inputMappingObj((object) $result["data"][0], $this);
+
             return true;
         } else {
+
             return false;
         }
+    }
+
+    function loadById()
+    {
+        $result = $this->_read("*", "id=", "", $this, "");
+
+        if ($this->validateStatus($result)) {
+
+            $this->inputMappingObj((object) $result["data"][0], $this);
+        }
+    }
+
+    function params()
+    {
+        $updateParams = $this->createParams($this, "id");
+        echo $updateParams;
     }
 }

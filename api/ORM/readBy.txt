@@ -6,26 +6,19 @@ include_once __DIR__ . '/../../objects/{nombreInstancia}.php';
 
 ${nombreInstancia} = new {nombreClase}($db);
 
-if ($common->validateInput($data, "{stringInsert}")) {
-
-    $db->beginTransaction();
+if ($common->validateInput($data, "{variableMin}")) {
 
     $common->inputMappingObj($data, ${nombreInstancia});
 
-    ${nombreInstancia}Result = ${nombreInstancia}-> create{nombreClase}();
+    ${nombreInstancia}Result = ${nombreInstancia}->getBy{variable}();
 
     if ($common->validateStatus(${nombreInstancia}Result)) {
 
-        $db->commit();
-
-        $common->response200(${nombreInstancia}Result);
+    $common->response200(${nombreInstancia}Result);
     } else {
-
-        $db->rollBack();
-
-        $common->response503("Unable to create.");
+        $common->response404("No data found.");
     }
 } else {
 
-    $common->response404("Data is incomplete.");
+    $common->response404("Datos incompletos.");
 }

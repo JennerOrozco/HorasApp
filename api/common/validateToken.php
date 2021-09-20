@@ -1,5 +1,5 @@
 <?php
-include_once 'commonIncludeJWT.php';
+include_once __DIR__ . '/includeJWT.php';
 
 use \Firebase\JWT\JWT;
 
@@ -17,6 +17,7 @@ function validateToken($stringJWT, $keyJWT)
             return array("status" => false, "data" => $e->getMessage());
         }
     } else {
+
         return array("status" => false, "data" => "JWT empty");
     }
 }

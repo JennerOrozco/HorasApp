@@ -1,0 +1,5 @@
+function deleteBy{variable}()
+{
+    $whereParams = "{variableMin}=";
+    return $this->_delete($whereParams, $this);
+}

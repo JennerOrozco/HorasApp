@@ -1,13 +1,17 @@
 <?php
-include_once '../common/commonHeaderGET.php';
-include_once '../common/commonInclude.php';
-include_once '../objects/{nombreInstancia}.php';
+include_once __DIR__ . '/../../common/headerGET.php';
+include_once __DIR__ . '/../../common/includeCommon.php';
+
+include_once __DIR__ . '/../../objects/{nombreInstancia}.php';
 
 ${nombreInstancia} = new {nombreClase}($db);
-${nombreInstancia}Result = ${nombreInstancia}->readAll();
 
-if (${nombreInstancia}Result["success"] == true) {    
-    $common->response200(array("data" => ${nombreInstancia}Result["data"]));
+${nombreInstancia}Result = ${nombreInstancia}->getAll();
+
+
+if ($common->validateStatus(${nombreInstancia}Result)) {
+
+    $common->response200(${nombreInstancia}Result);
 } else {
     $common->response404("No data found.");
 }

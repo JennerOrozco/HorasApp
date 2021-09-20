@@ -1,34 +1,63 @@
 <?php
-include_once '../config/common.php';
-class {nombreClase}
+include_once __DIR__ . '/../common/class/crud.php';
+
+class {nombreClase} extends CRUD
 {
+
     // DB connection y table name
     public $conn;
     public $table_name = "{nombreTabla}";
-    public Common $common;
 
-    // object properties
     {propiedadesClases}
 
 
-    // constructor with $db as database connection
     public function __construct($db)
     {
         $this->conn = $db;
-        $this->common = new Common();
     }
 
-    // read all
-    function readAll()
+
+    function getAll()
     {
-        return $this->common->read("*", "", "", $this, "");
+        return $this->_read("*", "", "", $this, "");
     }
 
-
-    function create()
+    function existField($string)
     {
-        $insertParams = "{stringClass}";
+        $result = $this->_read("*", $string, "", $this, "");
 
-        return $this->common->create($insertParams, $this);
+        if ($this->validateStatus($result)) {
+
+            $this->inputMappingObj((object) $result["data"][0], $this);
+
+            return true;
+        } else {
+
+            return false;
+        }
     }
+
+    function loadById()
+    {
+        $result = $this->_read("*", "id=", "", $this, "");
+
+        if ($this->validateStatus($result)) {
+
+            $this->inputMappingObj((object) $result["data"][0], $this);
+        }
+    }
+
+{getFunctionsSection}
+
+    public function create{nombreClase}()
+    {
+        $insertParams = "{stringInsert}";
+
+        return $this->_create($insertParams, $this);
+    }
+
+{updateFunctionsSection}
+
+{deleteFunctionsSection}
+
 }

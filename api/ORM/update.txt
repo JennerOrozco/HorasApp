@@ -6,13 +6,14 @@ include_once __DIR__ . '/../../objects/{nombreInstancia}.php';
 
 ${nombreInstancia} = new {nombreClase}($db);
 
-if ($common->validateInput($data, "{stringInsert}")) {
+if ($common->validateInput($data, "Campos a cambiar")) {
 
     $db->beginTransaction();
 
     $common->inputMappingObj($data, ${nombreInstancia});
 
-    ${nombreInstancia}Result = ${nombreInstancia}-> create{nombreClase}();
+    ${nombreInstancia}Result = ${nombreInstancia}->updateBy{variable}();
+    
 
     if ($common->validateStatus(${nombreInstancia}Result)) {
 
@@ -23,7 +24,7 @@ if ($common->validateInput($data, "{stringInsert}")) {
 
         $db->rollBack();
 
-        $common->response503("Unable to create.");
+        $common->response503("Unable to delete.");
     }
 } else {
 
