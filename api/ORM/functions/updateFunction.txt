@@ -1,6 +1,6 @@
 function updateBy{variable}()
 {
-    $updateParams = $this->createParams($this, "{variableMin}");    
+    $updateParams = $this->createParams($this, "id,{variableMin}");    
 
     $whereParams = "{variableMin}=";
 

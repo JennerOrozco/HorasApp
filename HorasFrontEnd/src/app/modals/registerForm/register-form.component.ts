@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { ModalController } from '@ionic/angular';
+import { LoadingController, ModalController } from '@ionic/angular';
+import { ApiService } from 'src/app/api/api.service';
 
 @Component({
   selector: 'app-register-form',
@@ -9,8 +10,9 @@ import { ModalController } from '@ionic/angular';
 })
 export class RegisterFormComponent implements OnInit {
   registerForm: FormGroup;
+  loading;
 
-  constructor(private modalCtrl: ModalController, private frmBld: FormBuilder) {
+  constructor(private modalCtrl: ModalController, private frmBld: FormBuilder, private callApi: ApiService, public loadingController: LoadingController) {
     this.registerForm = this.frmBld.group({
       nombres: new FormControl("", Validators.compose([
         Validators.required,
@@ -34,8 +36,24 @@ export class RegisterFormComponent implements OnInit {
     await this.modalCtrl.dismiss();
   }
 
-  registerUser(formValues) {
-    console.log(formValues)
+  async registerUser(formValues) {
+    this.presentLoading()
+    let apiResponse = await this.callApi.registerUser(formValues);
+    this.dismissLoading()
+    this.dismissModal()
   }
+
+  async presentLoading() {
+    this.loading = await this.loadingController.create({
+      message: 'Please wait...'
+    });
+    await this.loading.present();
+  }
+
+  async dismissLoading() {
+    await this.loading.dismiss()
+  }
+
+
 
 }

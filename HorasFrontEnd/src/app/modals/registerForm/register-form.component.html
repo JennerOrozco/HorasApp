@@ -8,15 +8,17 @@
 </ion-header>
 <ion-content fullscreen>
   <form [formGroup]="registerForm" (ngSubmit)="registerUser(registerForm.value)">
-    <ion-item class="roundedInput">
-      <ion-input formControlName=nombres></ion-input>
-    </ion-item>
-    <ion-item class="roundedInput">
-      <ion-input formControlName=apellidos></ion-input>
-    </ion-item>
-    <ion-item class="roundedInput">
-      <ion-input formControlName=correo></ion-input>
-    </ion-item>
+    <ion-card-content>
+      <ion-item class="roundedInput">
+        <ion-input formControlName=nombres></ion-input>
+      </ion-item>
+      <ion-item class="roundedInput">
+        <ion-input formControlName=apellidos></ion-input>
+      </ion-item>
+      <ion-item class="roundedInput">
+        <ion-input formControlName=correo></ion-input>
+      </ion-item>
+    </ion-card-content>
     <ion-button [disabled]="!registerForm.valid" type="submit" expand="block">Registrate con tus datos</ion-button>
   </form>
 </ion-content>
